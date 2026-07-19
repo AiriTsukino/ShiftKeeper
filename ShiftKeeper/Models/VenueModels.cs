@@ -1,4 +1,4 @@
-namespace VenueManager.Models;
+namespace ShiftKeeper.Models;
 
 public enum PayType
 {
@@ -380,7 +380,7 @@ public sealed class VenueProfile
 public sealed class VenueExportFile
 {
     public int FormatVersion { get; set; } = 3;
-    public string ExportedBy { get; set; } = "VenueManager";
+    public string ExportedBy { get; set; } = "ShiftKeeper";
     public DateTimeOffset ExportedUtc { get; set; } = DateTimeOffset.UtcNow;
     public VenueProfile Venue { get; set; } = VenueProfile.Create("Imported Venue");
 }

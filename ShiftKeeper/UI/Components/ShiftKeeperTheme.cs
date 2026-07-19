@@ -1,9 +1,9 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
-namespace VenueManager.UI.Components;
+namespace ShiftKeeper.UI.Components;
 
-internal static class VenueManagerTheme
+internal static class ShiftKeeperTheme
 {
     private static int colorCount;
     private static int varCount;

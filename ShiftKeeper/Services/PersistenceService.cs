@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using VenueManager.Models;
+using ShiftKeeper.Models;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed class PersistenceService : IDisposable
 {
@@ -25,8 +25,23 @@ public sealed class PersistenceService : IDisposable
     public PersistenceService(Configuration config)
     {
         this.config = config;
-        DataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher", "pluginConfigs", "VenueManager");
+        var pluginConfigRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher", "pluginConfigs");
+        DataDirectory = Path.Combine(pluginConfigRoot, "ShiftKeeper");
+        MigrateLegacyData(Path.Combine(pluginConfigRoot, "VenueManager"));
         Load();
+    }
+
+    private void MigrateLegacyData(string legacyDirectory)
+    {
+        if (!Directory.Exists(legacyDirectory)) return;
+
+        Directory.CreateDirectory(DataDirectory);
+        foreach (var name in new[] { "VenueProfiles.json", "StaffLists.json", "NightSessions.json" })
+        {
+            var source = Path.Combine(legacyDirectory, name);
+            var destination = Path.Combine(DataDirectory, name);
+            if (File.Exists(source) && !File.Exists(destination)) File.Copy(source, destination);
+        }
     }
 
     public VenueProfile ActiveVenue
@@ -77,7 +92,7 @@ public sealed class PersistenceService : IDisposable
             }
             catch (Exception ex)
             {
-                DalamudServices.Log.Error(ex, "VenueManager failed to save data.");
+                DalamudServices.Log.Error(ex, "ShiftKeeper failed to save data.");
             }
         }
     }
@@ -123,7 +138,7 @@ public sealed class PersistenceService : IDisposable
     public VenueProfile ImportVenue(string path)
     {
         var export = JsonConvert.DeserializeObject<VenueExportFile>(File.ReadAllText(path), JsonSettings)
-                     ?? throw new InvalidDataException("This file is not a VenueManager venue profile.");
+                     ?? throw new InvalidDataException("This file is not a ShiftKeeper venue profile.");
         var venue = export.Venue ?? throw new InvalidDataException("The profile did not contain a venue.");
         venue.Id = Guid.NewGuid();
         venue.Name = string.IsNullOrWhiteSpace(venue.Name) ? "Imported Venue" : venue.Name.Trim() + " (Imported)";
@@ -179,7 +194,7 @@ public sealed class PersistenceService : IDisposable
         }
         catch (Exception ex)
         {
-            DalamudServices.Log.Error(ex, "VenueManager failed to load split data; a default venue will be used.");
+            DalamudServices.Log.Error(ex, "ShiftKeeper failed to load split data; a default venue will be used.");
             Venues = [];
         }
         EnsureDefaults();

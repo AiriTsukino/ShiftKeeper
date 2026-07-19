@@ -1,7 +1,7 @@
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using VenueManager.Models;
+using ShiftKeeper.Models;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed class TargetingService
 {
@@ -46,7 +46,7 @@ public sealed class TargetingService
             return true;
         }
         LastStatus = $"{member.TellRecipient} is not currently visible or targetable.";
-        DalamudServices.ChatGui.PrintError(LastStatus, "VenueManager");
+        DalamudServices.ChatGui.PrintError(LastStatus, "ShiftKeeper");
         return false;
     }
 }

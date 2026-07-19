@@ -1,8 +1,8 @@
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin.Services;
-using VenueManager.Models;
+using ShiftKeeper.Models;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed class StaffTrackingService : IDisposable
 {

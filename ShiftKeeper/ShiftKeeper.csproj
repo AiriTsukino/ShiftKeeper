@@ -6,10 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <AssemblyName>VenueManager</AssemblyName>
-    <RootNamespace>VenueManager</RootNamespace>
-    <Version>1.0.11.1</Version>
-    <RepositoryUrl>https://github.com/AiriTsukino/VenueManager</RepositoryUrl>
+    <AssemblyName>ShiftKeeper</AssemblyName>
+    <RootNamespace>ShiftKeeper</RootNamespace>
+    <Version>1.0.12.0</Version>
+    <RepositoryUrl>https://github.com/AiriTsukino/ShiftKeeper</RepositoryUrl>
     <Description>Venue staffing, shift, attendance, and payroll dashboard for Final Fantasy XIV.</Description>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

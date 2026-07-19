@@ -2,11 +2,11 @@ using System.Diagnostics;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
-using VenueManager.Models;
-using VenueManager.Services;
-using VenueManager.UI.Components;
+using ShiftKeeper.Models;
+using ShiftKeeper.Services;
+using ShiftKeeper.UI.Components;
 
-namespace VenueManager.UI;
+namespace ShiftKeeper.UI;
 
 public sealed class MainWindow : Window
 {
@@ -27,7 +27,7 @@ public sealed class MainWindow : Window
     private bool openResetNightPopup;
 
     public MainWindow(Configuration config, PersistenceService persistence, TradePaymentService tradePayments, TargetingService targeting, FileDialogService dialogs, Action<StaffMember> openTell, Action openSettings)
-        : base("VenueManager Dashboard###VenueManagerMainWindow", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoFocusOnAppearing)
+        : base("ShiftKeeper Dashboard###ShiftKeeperMainWindow", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoFocusOnAppearing)
     {
         this.config = config;
         this.persistence = persistence;
@@ -43,8 +43,8 @@ public sealed class MainWindow : Window
         };
     }
 
-    public override void PreDraw() => VenueManagerTheme.Push();
-    public override void PostDraw() => VenueManagerTheme.Pop();
+    public override void PreDraw() => ShiftKeeperTheme.Push();
+    public override void PostDraw() => ShiftKeeperTheme.Pop();
 
     public override void Draw()
     {
@@ -97,7 +97,7 @@ public sealed class MainWindow : Window
         var buttonStart = MathF.Max(360f, width - totalButtonWidth);
         ImGui.SetCursorPos(new Vector2(buttonStart, 10));
         if (ImGui.Button("Settings", new Vector2(settingsWidth, 30))) openSettings();
-        UiHelpers.Help("Open the separate VenueManager settings window for staff, shifts, pay, and venue profiles.");
+        UiHelpers.Help("Open the separate ShiftKeeper settings window for staff, shifts, pay, and venue profiles.");
         ImGui.SameLine(0, gap);
         if (ImGui.Button("Reset Night", new Vector2(resetWidth, 30))) openResetNightPopup = true;
         UiHelpers.Help("Archive this night, clear timers and paid states, and begin a fresh venue night.");
@@ -114,9 +114,9 @@ public sealed class MainWindow : Window
     private static void DrawKofiButton(float width, float height)
     {
         const string supportText = "Support";
-        VenueManagerTheme.PushKofiButton();
+        ShiftKeeperTheme.PushKofiButton();
         var clicked = ImGui.Button("##venue-manager-kofi-support", new Vector2(width, height));
-        VenueManagerTheme.PopKofiButton();
+        ShiftKeeperTheme.PopKofiButton();
 
         var min = ImGui.GetItemRectMin();
         var max = ImGui.GetItemRectMax();
@@ -135,7 +135,7 @@ public sealed class MainWindow : Window
         }
         catch (Exception ex)
         {
-            DalamudServices.Log.Warning(ex, "VenueManager failed to open the Ko-fi link.");
+            DalamudServices.Log.Warning(ex, "ShiftKeeper failed to open the Ko-fi link.");
         }
     }
 
@@ -169,7 +169,7 @@ public sealed class MainWindow : Window
 
     private void DrawSettingsHeader(VenueProfile venue)
     {
-        ImGui.TextColored(new Vector4(0.78f, 0.62f, 1f, 1f), "VenueManager Settings");
+        ImGui.TextColored(new Vector4(0.78f, 0.62f, 1f, 1f), "ShiftKeeper Settings");
         ImGui.SameLine();
         ImGui.TextDisabled($"Local time: {DateTime.Now:h:mm:ss tt}");
         ImGui.SetNextItemWidth(MathF.Min(380, ImGui.GetContentRegionAvail().X * 0.55f));
@@ -201,11 +201,11 @@ public sealed class MainWindow : Window
         var unpaidStaff = venue.Staff.Where(s => s.Enabled && !venue.CurrentNight.GetOrCreate(s.Id).Paid && CalculateDue(s, venue) > 0).ToList();
         var payrollDue = unpaidStaff.Sum(s => CalculateDue(s, venue));
         var cardWidth = MathF.Max(140f, (ImGui.GetContentRegionAvail().X - 24f) / 4f);
-        DrawSummaryCard("SCHEDULED", scheduled.ToString("N0"), VenueManagerTheme.Purple, cardWidth);
+        DrawSummaryCard("SCHEDULED", scheduled.ToString("N0"), ShiftKeeperTheme.Purple, cardWidth);
         ImGui.SameLine();
-        DrawSummaryCard("IN VENUE", visible.ToString("N0"), VenueManagerTheme.Green, cardWidth);
+        DrawSummaryCard("IN VENUE", visible.ToString("N0"), ShiftKeeperTheme.Green, cardWidth);
         ImGui.SameLine();
-        DrawSummaryCard("UNPAID STAFF", unpaidStaff.Count.ToString("N0"), VenueManagerTheme.Amber, cardWidth);
+        DrawSummaryCard("UNPAID STAFF", unpaidStaff.Count.ToString("N0"), ShiftKeeperTheme.Amber, cardWidth);
         ImGui.SameLine();
         DrawSummaryCard("PAYROLL DUE", $"{payrollDue:N0} {venue.CurrencyLabel}", new Vector4(0.86f, 0.62f, 1f, 1f), cardWidth);
     }
@@ -321,21 +321,21 @@ public sealed class MainWindow : Window
 
     private static void DrawPresenceStatus(StaffMember member, NightlyStaffRecord record, VenueProfile venue)
     {
-        if (!record.Scheduled) { UiHelpers.Status("Off tonight", VenueManagerTheme.Muted); return; }
-        if (record.ShiftEndedEarly) { UiHelpers.Status("Shift ended", VenueManagerTheme.Amber); return; }
+        if (!record.Scheduled) { UiHelpers.Status("Off tonight", ShiftKeeperTheme.Muted); return; }
+        if (record.ShiftEndedEarly) { UiHelpers.Status("Shift ended", ShiftKeeperTheme.Amber); return; }
         if (member.PresenceMode == PresenceMode.NoTimer)
         {
-            UiHelpers.Status(record.HasWorked ? "Shift complete" : "Awaiting completion", record.HasWorked ? VenueManagerTheme.Green : VenueManagerTheme.Muted);
+            UiHelpers.Status(record.HasWorked ? "Shift complete" : "Awaiting completion", record.HasWorked ? ShiftKeeperTheme.Green : ShiftKeeperTheme.Muted);
             return;
         }
         if (member.PresenceMode == PresenceMode.ManualTimer)
         {
-            UiHelpers.Status(record.ManualClockedIn ? "Clocked in" : "Clocked out", record.ManualClockedIn ? VenueManagerTheme.Green : VenueManagerTheme.Muted);
+            UiHelpers.Status(record.ManualClockedIn ? "Clocked in" : "Clocked out", record.ManualClockedIn ? ShiftKeeperTheme.Green : ShiftKeeperTheme.Muted);
             return;
         }
-        if (record.IsVisible) UiHelpers.Status("In venue", VenueManagerTheme.Green);
-        else if (record.InCrashGrace) UiHelpers.Status("Crash grace", VenueManagerTheme.Amber);
-        else UiHelpers.Status("Not visible", VenueManagerTheme.Muted);
+        if (record.IsVisible) UiHelpers.Status("In venue", ShiftKeeperTheme.Green);
+        else if (record.InCrashGrace) UiHelpers.Status("Crash grace", ShiftKeeperTheme.Amber);
+        else UiHelpers.Status("Not visible", ShiftKeeperTheme.Muted);
         var shiftSummary = venue.GetShiftSummary(member);
         if (!string.IsNullOrWhiteSpace(shiftSummary)) ImGui.TextWrapped(shiftSummary);
     }
@@ -470,7 +470,7 @@ public sealed class MainWindow : Window
         if (!string.IsNullOrWhiteSpace(staffStatus))
         {
             ImGui.PushTextWrapPos();
-            ImGui.TextColored(staffStatus.StartsWith("Added", StringComparison.Ordinal) ? VenueManagerTheme.Green : VenueManagerTheme.Amber, staffStatus);
+            ImGui.TextColored(staffStatus.StartsWith("Added", StringComparison.Ordinal) ? ShiftKeeperTheme.Green : ShiftKeeperTheme.Amber, staffStatus);
             ImGui.PopTextWrapPos();
         }
         ImGui.Separator();
@@ -522,7 +522,7 @@ public sealed class MainWindow : Window
     private void DrawStaffEditor(VenueProfile venue, StaffMember member)
     {
         var changed = false;
-        ImGui.TextColored(VenueManagerTheme.Purple, "Staff Details");
+        ImGui.TextColored(ShiftKeeperTheme.Purple, "Staff Details");
         var enabled = member.Enabled;
         if (ImGui.Checkbox("Enabled on permanent roster", ref enabled)) { member.Enabled = enabled; changed = true; }
         var name = member.Name;
@@ -650,7 +650,7 @@ public sealed class MainWindow : Window
             persistence.SaveNow();
         }
         UiHelpers.Help("Watch completed outgoing gil trades and apply the traded amount as payment credit when the recipient matches a scheduled staff member on the active venue roster. Exact home world is used when available; ambiguous same-name matches are ignored. Party membership is not required.");
-        ImGui.PushStyleColor(ImGuiCol.Text, VenueManagerTheme.Muted);
+        ImGui.PushStyleColor(ImGuiCol.Text, ShiftKeeperTheme.Muted);
         ImGui.PushTextWrapPos();
         ImGui.TextWrapped(tradePayments.DetectionStatus);
         ImGui.PopTextWrapPos();
@@ -658,10 +658,10 @@ public sealed class MainWindow : Window
 
         var crashRecovery = config.HostCrashRecoveryEnabled;
         if (ImGui.Checkbox("Recover timers after host crash or reload", ref crashRecovery)) { config.HostCrashRecoveryEnabled = crashRecovery; persistence.SaveNow(); }
-        UiHelpers.Help("VenueManager saves a tracking checkpoint about every ten seconds. After the plugin or host returns, recovery waits through the main menu, loading screens, and time outside the venue. Previously working staff recover eligible time once their attendance is confirmed, while live visibility and timing continue normally for other staff.");
+        UiHelpers.Help("ShiftKeeper saves a tracking checkpoint about every ten seconds. After the plugin or host returns, recovery waits through the main menu, loading screens, and time outside the venue. Previously working staff recover eligible time once their attendance is confirmed, while live visibility and timing continue normally for other staff.");
         if (venue.CurrentNight.LastCrashRecoveryUtc is { } recoveredUtc)
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, VenueManagerTheme.Muted);
+            ImGui.PushStyleColor(ImGuiCol.Text, ShiftKeeperTheme.Muted);
             ImGui.TextWrapped($"Last recovery: {StaffTrackingService.FormatDuration(venue.CurrentNight.LastCrashRecoverySeconds)} for {venue.CurrentNight.LastCrashRecoveryStaffCount} staff at {recoveredUtc.LocalDateTime:g}");
             ImGui.PopStyleColor();
         }
@@ -797,7 +797,7 @@ public sealed class MainWindow : Window
         if (dialogOpenForFrame) ImGui.BeginDisabled();
         if (ImGui.Button("Export Current Venue", new Vector2(180, 0)))
         {
-            var suggested = UiHelpers.SafeFileName(venue.Name) + "-VenueManager.json";
+            var suggested = UiHelpers.SafeFileName(venue.Name) + "-ShiftKeeper.json";
             dialogs.SaveJson(suggested,
                 path => { try { persistence.ExportVenue(venue, path); profileStatus = $"Exported to {path}"; } catch (Exception ex) { profileStatus = ex.Message; } },
                 error => profileStatus = error);

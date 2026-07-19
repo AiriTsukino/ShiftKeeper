@@ -1,6 +1,6 @@
 using Dalamud.Configuration;
 
-namespace VenueManager;
+namespace ShiftKeeper;
 
 [Serializable]
 public sealed class Configuration : IPluginConfiguration

@@ -2,7 +2,7 @@ using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Shell;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed class ChatCommandService
 {
@@ -43,8 +43,8 @@ public sealed class ChatCommandService
         catch (Exception ex)
         {
             LastError = ex.Message;
-            DalamudServices.Log.Error(ex, "VenueManager failed to send a tell.");
-            DalamudServices.ChatGui.PrintError($"VenueManager could not send the tell: {ex.Message}", "VenueManager");
+            DalamudServices.Log.Error(ex, "ShiftKeeper failed to send a tell.");
+            DalamudServices.ChatGui.PrintError($"ShiftKeeper could not send the tell: {ex.Message}", "ShiftKeeper");
             return false;
         }
     }

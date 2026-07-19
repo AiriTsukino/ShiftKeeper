@@ -1,7 +1,7 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
-namespace VenueManager.UI.Components;
+namespace ShiftKeeper.UI.Components;
 
 internal static class UiHelpers
 {

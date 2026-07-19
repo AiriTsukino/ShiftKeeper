@@ -1,6 +1,6 @@
 using Dalamud.Interface.ImGuiFileDialog;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed class FileDialogService : IDisposable
 {
@@ -18,7 +18,7 @@ public sealed class FileDialogService : IDisposable
         try
         {
             manager.SaveFileDialog(
-                "Export VenueManager venue profile",
+                "Export ShiftKeeper venue profile",
                 ".json",
                 suggestedName,
                 ".json",
@@ -40,7 +40,7 @@ public sealed class FileDialogService : IDisposable
         try
         {
             manager.OpenFileDialog(
-                "Import VenueManager venue profile",
+                "Import ShiftKeeper venue profile",
                 ".json",
                 (bool selected, List<string> paths) => Complete(selected, paths.FirstOrDefault() ?? string.Empty, success, error),
                 1,

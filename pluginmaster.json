@@ -1,19 +1,19 @@
 [
   {
     "Author": "Airi Tsukino",
-    "Name": "VenueManager",
-    "InternalName": "VenueManager",
-    "AssemblyVersion": "1.0.11.1",
+    "Name": "ShiftKeeper",
+    "InternalName": "ShiftKeeper",
+    "AssemblyVersion": "1.0.12.0",
     "Description": "Multi-venue staff, shift, attendance, and payroll management dashboard.",
     "Punchline": "Manage venue staff, shifts, attendance, and pay.",
-    "RepoUrl": "https://github.com/AiriTsukino/VenueManager",
+    "RepoUrl": "https://github.com/AiriTsukino/ShiftKeeper",
     "ApplicableVersion": "any",
     "DalamudApiLevel": 15,
     "IsHide": false,
     "IsTestingExclusive": false,
-    "IconUrl": "https://raw.githubusercontent.com/AiriTsukino/VenueManager/main/VenueManager/Resources/VMLogo.png",
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/AiriTsukino/VenueManager/main/VenueManager.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/AiriTsukino/VenueManager/main/VenueManager.zip",
-    "LastUpdate": "1784425270"
+    "IconUrl": "https://raw.githubusercontent.com/AiriTsukino/ShiftKeeper/main/ShiftKeeper/Resources/ShiftKeeperLogo.png",
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/AiriTsukino/ShiftKeeper/main/ShiftKeeper.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/AiriTsukino/ShiftKeeper/main/ShiftKeeper.zip",
+    "LastUpdate": "1784429466"
   }
 ]

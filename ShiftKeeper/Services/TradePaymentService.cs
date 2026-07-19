@@ -4,9 +4,9 @@ using Dalamud.Game.Chat;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using VenueManager.Models;
+using ShiftKeeper.Models;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public sealed unsafe class TradePaymentService : IDisposable
 {
@@ -292,7 +292,7 @@ public sealed unsafe class TradePaymentService : IDisposable
         DetectionStatus = excess > 0
             ? $"Applied {applied:N0} gil to {staff.TellRecipient}; {excess:N0} gil exceeded their maximum tracked shift pay. Remaining due: {remaining:N0} gil."
             : $"Applied {applied:N0} gil to {staff.TellRecipient}. Remaining due: {remaining:N0} gil{(record.Paid ? "; marked Paid." : ".")}";
-        DalamudServices.Log.Information("VenueManager {Source}: applied {Applied} gil trade payment to {Staff}; remaining due {Remaining} gil.", source, applied, staff.TellRecipient, remaining);
+        DalamudServices.Log.Information("ShiftKeeper {Source}: applied {Applied} gil trade payment to {Staff}; remaining due {Remaining} gil.", source, applied, staff.TellRecipient, remaining);
         ClearPendingStaff(keepStatus: true, clearRecentlyCompleted: true);
     }
 

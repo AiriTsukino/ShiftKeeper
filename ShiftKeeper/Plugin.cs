@@ -1,16 +1,17 @@
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
-using VenueManager.Services;
-using VenueManager.UI;
+using Newtonsoft.Json;
+using ShiftKeeper.Services;
+using ShiftKeeper.UI;
 
-namespace VenueManager;
+namespace ShiftKeeper;
 
 public sealed class Plugin : IDalamudPlugin
 {
-    private const string CommandName = "/venuemanager";
-    private const string SettingsCommandName = "/venuemanagersettings";
-    private readonly WindowSystem windowSystem = new("VenueManager");
+    private const string CommandName = "/shiftkeeper";
+    private const string SettingsCommandName = "/shiftkeepersettings";
+    private readonly WindowSystem windowSystem = new("ShiftKeeper");
     private readonly Configuration config;
     private readonly PersistenceService persistence;
     private readonly StaffTrackingService tracking;
@@ -23,7 +24,7 @@ public sealed class Plugin : IDalamudPlugin
     public Plugin(IDalamudPluginInterface pluginInterface)
     {
         DalamudServices.Initialize(pluginInterface);
-        config = DalamudServices.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        config = LoadConfiguration();
         if (config.Version < 3) config.Version = 3;
         persistence = new PersistenceService(config);
         tracking = new StaffTrackingService(config, persistence);
@@ -38,9 +39,9 @@ public sealed class Plugin : IDalamudPlugin
         windowSystem.AddWindow(settingsWindow);
         windowSystem.AddWindow(tellWindow);
 
-        var info = new CommandInfo(OnCommand) { HelpMessage = "Toggle the VenueManager dashboard." };
+        var info = new CommandInfo(OnCommand) { HelpMessage = "Toggle the ShiftKeeper dashboard." };
         DalamudServices.CommandManager.AddHandler(CommandName, info);
-        DalamudServices.CommandManager.AddHandler(SettingsCommandName, new CommandInfo(OnSettingsCommand) { HelpMessage = "Toggle VenueManager settings." });
+        DalamudServices.CommandManager.AddHandler(SettingsCommandName, new CommandInfo(OnSettingsCommand) { HelpMessage = "Toggle ShiftKeeper settings." });
         DalamudServices.PluginInterface.UiBuilder.Draw += DrawUi;
         DalamudServices.PluginInterface.UiBuilder.OpenMainUi += ToggleMainUi;
         DalamudServices.PluginInterface.UiBuilder.OpenConfigUi += ToggleSettingsUi;
@@ -49,6 +50,28 @@ public sealed class Plugin : IDalamudPlugin
 
     private void OnCommand(string command, string arguments) => ToggleMainUi();
     private void OnSettingsCommand(string command, string arguments) => ToggleSettingsUi();
+
+    private static Configuration LoadConfiguration()
+    {
+        if (DalamudServices.PluginInterface.GetPluginConfig() is Configuration current) return current;
+
+        var legacyPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "XIVLauncher",
+            "pluginConfigs",
+            "VenueManager.json");
+        try
+        {
+            if (File.Exists(legacyPath))
+                return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(legacyPath)) ?? new Configuration();
+        }
+        catch (Exception ex)
+        {
+            DalamudServices.Log.Warning(ex, "ShiftKeeper could not migrate the legacy VenueManager configuration.");
+        }
+
+        return new Configuration();
+    }
 
     private void ToggleMainUi()
     {

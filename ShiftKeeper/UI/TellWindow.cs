@@ -1,11 +1,11 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
-using VenueManager.Models;
-using VenueManager.Services;
-using VenueManager.UI.Components;
+using ShiftKeeper.Models;
+using ShiftKeeper.Services;
+using ShiftKeeper.UI.Components;
 
-namespace VenueManager.UI;
+namespace ShiftKeeper.UI;
 
 public sealed class TellWindow : Window, IDisposable
 {
@@ -17,7 +17,7 @@ public sealed class TellWindow : Window, IDisposable
     private bool sending;
 
     public TellWindow(ChatCommandService chat)
-        : base("Send Staff Tell###VenueManagerTellWindow", ImGuiWindowFlags.NoFocusOnAppearing)
+        : base("Send Staff Tell###ShiftKeeperTellWindow", ImGuiWindowFlags.NoFocusOnAppearing)
     {
         this.chat = chat;
         SizeConstraints = new WindowSizeConstraints
@@ -35,8 +35,8 @@ public sealed class TellWindow : Window, IDisposable
         IsOpen = true;
     }
 
-    public override void PreDraw() => VenueManagerTheme.Push();
-    public override void PostDraw() => VenueManagerTheme.Pop();
+    public override void PreDraw() => ShiftKeeperTheme.Push();
+    public override void PostDraw() => ShiftKeeperTheme.Pop();
 
     public override void Draw()
     {
@@ -54,10 +54,10 @@ public sealed class TellWindow : Window, IDisposable
         ImGui.InputTextMultiline("##venue-manager-tell-message", ref message, 450, new Vector2(-1, 96));
         var enterPressed = ImGui.IsItemActive() && ImGui.IsKeyPressed(ImGuiKey.Enter);
         ImGui.TextDisabled($"{message.Length}/450 characters. Press Enter or Send to deliver the tell.");
-        UiHelpers.Help("VenueManager sends this through the game's native chat command system as /tell Firstname Lastname@World message. Line breaks are converted to spaces.");
+        UiHelpers.Help("ShiftKeeper sends this through the game's native chat command system as /tell Firstname Lastname@World message. Line breaks are converted to spaces.");
 
         if (!string.IsNullOrWhiteSpace(status))
-            UiHelpers.Status(status, status.StartsWith("Sent", StringComparison.Ordinal) ? VenueManagerTheme.Green : VenueManagerTheme.Amber);
+            UiHelpers.Status(status, status.StartsWith("Sent", StringComparison.Ordinal) ? ShiftKeeperTheme.Green : ShiftKeeperTheme.Amber);
 
         var canSend = !sending && !string.IsNullOrWhiteSpace(message);
         if (!canSend) ImGui.BeginDisabled();

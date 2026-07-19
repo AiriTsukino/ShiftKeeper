@@ -1,6 +1,6 @@
-using VenueManager.Models;
+using ShiftKeeper.Models;
 
-namespace VenueManager.Services;
+namespace ShiftKeeper.Services;
 
 public static class PayCalculator
 {
