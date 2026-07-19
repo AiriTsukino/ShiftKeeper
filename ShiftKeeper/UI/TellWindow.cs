@@ -51,7 +51,7 @@ public sealed class TellWindow : Window, IDisposable
         ImGui.Spacing();
         ImGui.TextDisabled("Message");
         ImGui.SetNextItemWidth(-1);
-        ImGui.InputTextMultiline("##venue-manager-tell-message", ref message, 450, new Vector2(-1, 96));
+        ImGui.InputTextMultiline("##shift-keeper-tell-message", ref message, 450, new Vector2(-1, 96));
         var enterPressed = ImGui.IsItemActive() && ImGui.IsKeyPressed(ImGuiKey.Enter);
         ImGui.TextDisabled($"{message.Length}/450 characters. Press Enter or Send to deliver the tell.");
         UiHelpers.Help("ShiftKeeper sends this through the game's native chat command system as /tell Firstname Lastname@World message. Line breaks are converted to spaces.");

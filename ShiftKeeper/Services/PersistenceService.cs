@@ -27,21 +27,7 @@ public sealed class PersistenceService : IDisposable
         this.config = config;
         var pluginConfigRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XIVLauncher", "pluginConfigs");
         DataDirectory = Path.Combine(pluginConfigRoot, "ShiftKeeper");
-        MigrateLegacyData(Path.Combine(pluginConfigRoot, "VenueManager"));
         Load();
-    }
-
-    private void MigrateLegacyData(string legacyDirectory)
-    {
-        if (!Directory.Exists(legacyDirectory)) return;
-
-        Directory.CreateDirectory(DataDirectory);
-        foreach (var name in new[] { "VenueProfiles.json", "StaffLists.json", "NightSessions.json" })
-        {
-            var source = Path.Combine(legacyDirectory, name);
-            var destination = Path.Combine(DataDirectory, name);
-            if (File.Exists(source) && !File.Exists(destination)) File.Copy(source, destination);
-        }
     }
 
     public VenueProfile ActiveVenue

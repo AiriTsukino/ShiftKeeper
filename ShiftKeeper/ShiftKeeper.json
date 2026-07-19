@@ -1,10 +1,10 @@
 {
   "Author": "Airi Tsukino",
   "Name": "ShiftKeeper",
-  "AssemblyVersion": "1.0.12.0",
+  "AssemblyVersion": "1.0.14.0",
   "Punchline": "Manage venue staff, shifts, attendance, and pay.",
   "Description": "A multi-venue staff dashboard with presence-aware timers, configurable shifts and grace periods, payroll status, targeting, tells, and JSON profile import/export.",
-  "IconUrl": "https://raw.githubusercontent.com/AiriTsukino/ShiftKeeper/main/ShiftKeeper/Resources/ShiftKeeperLogo.png",
+  "IconUrl": "https://raw.githubusercontent.com/AiriTsukino/ShiftKeeper/main/ShiftKeeper/Resources/SKLogo.png",
   "RepoUrl": "https://github.com/AiriTsukino/ShiftKeeper",
   "Tags": ["housing", "venue", "staff", "payroll", "management"],
   "InternalName": "ShiftKeeper",

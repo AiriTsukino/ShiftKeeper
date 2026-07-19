@@ -54,7 +54,7 @@ public sealed class MainWindow : Window
         DrawDashboard(venue);
         if (openResetNightPopup)
         {
-            ImGui.OpenPopup("Reset Venue Night?##venue-manager-reset-night");
+            ImGui.OpenPopup("Reset Venue Night?##shift-keeper-reset-night");
             openResetNightPopup = false;
         }
         DrawResetConfirmation(venue);
@@ -65,7 +65,7 @@ public sealed class MainWindow : Window
         var venue = persistence.ActiveVenue;
         DrawSettingsHeader(venue);
         ImGui.Separator();
-        if (ImGui.BeginTabBar("venue-manager-settings-tabs"))
+        if (ImGui.BeginTabBar("shift-keeper-settings-tabs"))
         {
             if (ImGui.BeginTabItem("Staff List")) { DrawStaffList(venue); ImGui.EndTabItem(); }
             if (ImGui.BeginTabItem("Shifts & Pay")) { DrawShiftsAndPay(venue); ImGui.EndTabItem(); }
@@ -74,7 +74,7 @@ public sealed class MainWindow : Window
         }
         if (openDeleteStaffPopup)
         {
-            ImGui.OpenPopup("Remove Staff?##venue-manager-remove-staff");
+            ImGui.OpenPopup("Remove Staff?##shift-keeper-remove-staff");
             openDeleteStaffPopup = false;
         }
         DrawDeleteStaffConfirmation(venue);
@@ -115,7 +115,7 @@ public sealed class MainWindow : Window
     {
         const string supportText = "Support";
         ShiftKeeperTheme.PushKofiButton();
-        var clicked = ImGui.Button("##venue-manager-kofi-support", new Vector2(width, height));
+        var clicked = ImGui.Button("##shift-keeper-kofi-support", new Vector2(width, height));
         ShiftKeeperTheme.PopKofiButton();
 
         var min = ImGui.GetItemRectMin();
@@ -779,11 +779,11 @@ public sealed class MainWindow : Window
         if (persistence.Venues.Count > 1)
         {
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.45f, 0.12f, 0.20f, 1f));
-            if (ImGui.Button("Delete Current Venue")) ImGui.OpenPopup("Delete Venue?##venue-manager-delete-venue");
+            if (ImGui.Button("Delete Current Venue")) ImGui.OpenPopup("Delete Venue?##shift-keeper-delete-venue");
             ImGui.PopStyleColor();
         }
 
-        if (ImGui.BeginPopupModal("Delete Venue?##venue-manager-delete-venue", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize))
+        if (ImGui.BeginPopupModal("Delete Venue?##shift-keeper-delete-venue", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize))
         {
             ImGui.TextWrapped($"Delete '{venue.Name}' and all of its staff, shifts, and night records? This cannot be undone.");
             if (ImGui.Button("Delete", new Vector2(110, 0))) { persistence.DeleteVenue(venue.Id); selectedStaffIndex = -1; ImGui.CloseCurrentPopup(); }
@@ -820,7 +820,7 @@ public sealed class MainWindow : Window
 
     private void DrawResetConfirmation(VenueProfile venue)
     {
-        if (!ImGui.BeginPopupModal("Reset Venue Night?##venue-manager-reset-night", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize)) return;
+        if (!ImGui.BeginPopupModal("Reset Venue Night?##shift-keeper-reset-night", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize)) return;
         ImGui.TextWrapped($"Archive the current night for {venue.Name} and start a clean night? Timers and paid statuses will reset.");
         if (ImGui.Button("Reset Night", new Vector2(120, 0))) { persistence.ResetNight(venue); ImGui.CloseCurrentPopup(); }
         ImGui.SameLine(); if (ImGui.Button("Cancel", new Vector2(100, 0))) ImGui.CloseCurrentPopup();
@@ -829,7 +829,7 @@ public sealed class MainWindow : Window
 
     private void DrawDeleteStaffConfirmation(VenueProfile venue)
     {
-        if (!ImGui.BeginPopupModal("Remove Staff?##venue-manager-remove-staff", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize)) return;
+        if (!ImGui.BeginPopupModal("Remove Staff?##shift-keeper-remove-staff", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoResize)) return;
         var member = venue.Staff.FirstOrDefault(x => x.Id == pendingDeleteStaffId);
         ImGui.TextWrapped(member is null ? "Remove this staff member?" : $"Remove {member.Name} from {venue.Name}'s permanent staff list?");
         if (ImGui.Button("Remove", new Vector2(110, 0)))

@@ -55,19 +55,19 @@ public sealed class Plugin : IDalamudPlugin
     {
         if (DalamudServices.PluginInterface.GetPluginConfig() is Configuration current) return current;
 
-        var legacyPath = Path.Combine(
+        var configurationPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "XIVLauncher",
             "pluginConfigs",
-            "VenueManager.json");
+            "ShiftKeeper.json");
         try
         {
-            if (File.Exists(legacyPath))
-                return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(legacyPath)) ?? new Configuration();
+            if (File.Exists(configurationPath))
+                return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configurationPath)) ?? new Configuration();
         }
         catch (Exception ex)
         {
-            DalamudServices.Log.Warning(ex, "ShiftKeeper could not migrate the legacy VenueManager configuration.");
+            DalamudServices.Log.Warning(ex, "ShiftKeeper could not load its configuration file.");
         }
 
         return new Configuration();
