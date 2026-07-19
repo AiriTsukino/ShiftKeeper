@@ -1,6 +1,6 @@
-# VenueManager
+# ShiftKeeper
 
-VenueManager is a Dalamud plugin for Final Fantasy XIV venue staffing. It manages venue profiles, staff rosters, multi-shift schedules, attendance timers, pay, targeting, tells, and night records.
+ShiftKeeper is a Dalamud plugin for Final Fantasy XIV venue staffing. It manages venue profiles, staff rosters, multi-shift schedules, attendance timers, pay, targeting, tells, and night records.
 
 ## Repo Link
 
